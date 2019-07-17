@@ -3,3 +3,4 @@
 venv/Lib/*
 venv/Scripts/*
 venv/resources/credentials.json
+venv/src/db/__pycache__/*

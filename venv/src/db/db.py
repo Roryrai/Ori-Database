@@ -28,34 +28,63 @@ def connect():
         print(error)
 
 
-def insertParticipant(participant):
-    query = """
+def insertParticipant(participantParams, runnerParams, volunteerParams):
+    mainQuery = """
         insert into participants(display_name,
-        discord_name,
-        preferred_name,
-        pronunciation,
-        pronouns,
-        timezone,
-        interesting_facts,
-        timestamp)
-        values (%s, %s, %s, %s, %s, %s, %s, %s) returning id
+            discord_name,
+            preferred_name,
+            pronunciation,
+            pronouns,
+            interesting_facts,
+            timestamp)
+        values(%s, %s, %s, %s, %s, %s, %s) returning id
     """
+
+    runnerQuery = """
+        insert into runners(participant_id,
+            srl_name,
+            twitch_name,
+            src_name,
+            availability_weekday,
+            availability_weekend,
+            input_method,
+            tricks,
+            techniques,
+            sunstone_method,
+            health_cells,
+            started_learning,
+            unique_strats,
+            other_games,
+            timezone)
+        values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) returning id
+    """
+
+    volunteerQuery = """
+        insert into volunteers(
+            participant_id,
+            restream,
+            commentary,
+            tracking,
+            organizer)
+        values(%s, %s, %s, %s, %s) returning id
+    """
+
     conn = connect()
+    cur = conn.cursor()
     try:
-        cur = conn.cursor()
-        cur.execute(query, params)
+        cur.execute(mainQuery, participantParams)
         participantId = cur.fetchone()[0]
+
+        if runnerParams is not None:
+            runnerParams = (participantId,) + runnerParams
+            cur.execute(runnerQuery, runnerParams)
+
+        if volunteerParams is not None:
+            volunteerParams = (participantId,) + volunteerParams
+            cur.execute(volunteerQuery, volunteerParams)
+
         conn.commit()
-        return participant_id
     except (Exception, pg.DatabaseError) as error:
         print(error)
-
     finally:
         conn.close()
-
-def insertRunner(params):
-    insertParticipant(params)
-
-
-def insertVolunteer(params):
-    insertParticipant()
