@@ -28,7 +28,7 @@ def connect():
         print(error)
 
 
-def insertParticipant(params):
+def insertParticipant(participant):
     query = """
         insert into participants(display_name,
         discord_name,
