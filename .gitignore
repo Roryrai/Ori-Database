@@ -1,5 +1,5 @@
 
 .idea/*
-Lib/*
-Scripts/*
-
+venv/Lib/*
+venv/Scripts/*
+venv/resources/credentials.json
