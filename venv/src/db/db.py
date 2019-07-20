@@ -27,6 +27,23 @@ def connect():
     except (Exception, pg.DatabaseError) as error:
         print(error)
 
+def query(sql, params=None):
+    try:
+        conn = connect()
+        cur = conn.cursor()
+        if params:
+            cur.execute(sql, params)
+        else:
+            cur.execute(sql)
+        if "insert" in sql:
+            conn.commit()
+        if "select" in sql:
+            return cur.fetchall()
+    except (Exception, pg.DatabaseError) as error:
+        print(error)
+    finally:
+        conn.close()
+
 
 def insertParticipant(participantParams, runnerParams, volunteerParams):
     mainQuery = """
