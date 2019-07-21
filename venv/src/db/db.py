@@ -35,9 +35,9 @@ def query(sql, params=None):
             cur.execute(sql, params)
         else:
             cur.execute(sql)
-        if "insert" in sql:
+        if "insert" in sql or "update" in sql:
             conn.commit()
-        if "select" in sql:
+        if "select" in sql or "returning" in sql:
             return cur.fetchall()
     except (Exception, pg.DatabaseError) as error:
         print(error)
