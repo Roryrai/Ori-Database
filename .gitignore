@@ -1,6 +1,6 @@
-
 .idea/*
 venv/Lib/*
 venv/Scripts/*
 venv/resources/credentials.json
+venv/resources/database.ini
 venv/src/db/__pycache__/*

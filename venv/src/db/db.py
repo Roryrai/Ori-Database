@@ -27,6 +27,11 @@ def connect():
     except (Exception, pg.DatabaseError) as error:
         print(error)
 
+# Test the connection
+def testConnect():
+    print(query("select version()"))
+
+# Execute a query
 def query(sql, params=None):
     try:
         conn = connect()
@@ -43,6 +48,26 @@ def query(sql, params=None):
         print(error)
     finally:
         conn.close()
+
+"""
+    sunstone = 1
+    healthCells = 2
+    learning = 3
+    differently = 4
+    categories = 5
+    techniques = 6
+    tricks = 7
+"""
+
+def insertQuestions(tournamentId, questionId, answer, participantId):
+    questionId = """
+        insert into question_responses(
+            participant_id,
+            question_id,
+            response)
+        values(%s, %s, %s)
+    """
+    pass
 
 
 def insertParticipant(participantParams, runnerParams, volunteerParams):
@@ -105,3 +130,6 @@ def insertParticipant(participantParams, runnerParams, volunteerParams):
         print(error)
     finally:
         conn.close()
+
+if __name__ == "__main__":
+    testConnect()
