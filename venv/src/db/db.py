@@ -31,7 +31,9 @@ def connect():
 def testConnect():
     print(query("select version()"))
 
-# Execute a query
+# Execute a query.
+# sql is the parameterized sql string.
+# params is a tuple of parameters to that string
 def query(sql, params=None):
     try:
         conn = connect()
@@ -59,17 +61,20 @@ def query(sql, params=None):
     tricks = 7
 """
 
-def insertQuestions(tournamentId, questionId, answer, participantId):
-    questionId = """
+# Inserts a question response
+def insertQuestion(questionParams):
+    sql = """
         insert into question_responses(
             participant_id,
             question_id,
             response)
         values(%s, %s, %s)
     """
-    pass
+    res = query(sql, questionParams)
+    print(res)
 
 
+# Inserts a participant given all of the correct parameters
 def insertParticipant(participantParams, runnerParams, volunteerParams):
     mainQuery = """
         insert into participants(display_name,

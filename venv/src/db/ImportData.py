@@ -59,7 +59,33 @@ def readFile(file):
 
         db.insertParticipant(participantParams, runnerParams, volunteerParams)
 
+
+def importQuestions(file):
+    reader = csv.reader(file)
+    for row in reader:
+        # Runner-specific stuff
+        runner = True if row[5] == "Yes" else False
+        if runner:
+            discordName = row[1]
+
+            tricks = row[16]
+            techniques = row[17]
+            sunstoneMethod = row[18]
+            healthCells = row[19]
+            startedLearning = row[20]
+            uniqueStrats = row[21]
+            otherGames = row[22]
+
+            responses = [sunstoneMethod, healthCells, startedLearning, uniqueStrats, otherGames, techniques, tricks]
+            print(responses)
+            participantId = db.query("select id from participants where discord_name = %s", (discordName,))
+            print(participantId[0][0])
+            for i in range(0, len(responses)):
+                db.insertQuestion((participantId[0][0], i+1, responses[i],))
+
+
 if __name__ == "__main__":
     file = open("venv/resources/signups.csv", "r", encoding="utf8")
     # print(file.read())
-    readFile(file)
+    # readFile(file)
+    importQuestions(file)
